@@ -1,54 +1,30 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  /* colori */
+  --sfondo: #0e0c0b;
+  --testo: #efe7da;
+  --libro: #efe7da;
+  --tavola: #fafafa;
+
+  /* testo */
+  --font: "Courier New", Arial, sans-serif;
+  --testo-dimensione: 12px;
+
+  /* libri e scaffali (in pixel) */
+  --libro-larghezza: 7px;
+  --libro-spazio: 2px;
+  --libro-altezza: 48px;
+  --tavola-spessore: 4px;
+  --scaffale-spazio: 22px;
+  --margine: 40px;
+  --etichetta-larghezza: 190px;
 }
 
 body {
-  background-color: #0d1a15; /* Sfondo verde scuro come nello screenshot */
-  color: #e5ece9;
-  font-family: 'Courier New', Courier, monospace;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--sfondo);
 }
 
-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background-color: #0d1a15;
-  border-bottom: 1px solid #1a2e26;
-}
-
-header .logo {
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-.search-bar input {
-  background-color: #13241d;
-  border: 1px solid #2a4539;
-  color: #a3c2b5;
-  padding: 5px 15px;
-  border-radius: 12px;
-  width: 250px;
-  text-align: center;
-  font-family: inherit;
-}
-
-header nav a {
-  color: #e5ece9;
-  text-decoration: none;
-  margin-left: 20px;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-}
-
-#canvas-container {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
+canvas {
+  display: block;
 }
