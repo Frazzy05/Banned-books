@@ -31,11 +31,15 @@ async function setup() {
   // Conta i libri per motivazione (un libro con più motivazioni conta in ciascuna)
   for (let row = 0; row < data.getRowCount(); row++) { //Passa tutte le righe del CSV, cioè tutti i libri, uno alla volta
    
-    let reasons = (data.getString(row, "reason_categories") || "").split(/[;\r\n]+/); //prendi la colonna delle motivazioni; se non c’è niente, considera un testo vuoto; poi spezzalo in una lista. Prende dalla riga corrente il testo della colonna reason_categories e lo spezza ogni volta che trova un ; o un ritono a capo (r) o un a capo (n). Es: racial_themes;political_content diventa una lista di due motivazioni.
+  let reasons = (data.getString(row, "reason_categories") || "").split(/[;\r\n]+/); //prendi la colonna delle motivazioni; se non c’è niente, considera un testo vuoto; poi spezzalo in una lista. Prende dalla riga corrente il testo della colonna reason_categories e lo spezza ogni volta che trova un ; o un ritono a capo (r) o un a capo (n). Es: racial_themes;political_content diventa una lista di due motivazioni.
     
-    for (let reason of new Set(reasons)) { //Passa le motivazioni del libro una alla volta. Set toglie i doppioni: se una motivazione è scritta due volte nello stesso libro, conta una volta sola.
-      counts[reason] = (counts[reason] || 0) + 1; //Aggiunge 1 al contatore della motivazione. Se è la prima volta che compare parte da zero. Un libro con tre motivazioni diverse aumenta tre contatori. (I libri senza motivazione finiscono nella voce "" che nessuno scaffale legge.)
-    }
+  let bookReasons = new Set(reasons); // Trasforma la lista in un set, cioè una lista senza duplicati. Se un libro ha due volte la stessa motivazione, conta solo una volta. Es: racial_themes;political_content;racial_themes diventa un set di due motivazioni.
+  if (bookReasons.size > 1) { // Se un libro ha più motivazioni, non contare la motivazione "unspecified" (che significa "non specificata"). Se un libro ha solo una motivazione, anche se è "unspecified", la conta.
+    bookReasons.delete("unspecified");
+  }
+  for (let reason of bookReasons) {      
+  counts[reason] = (counts[reason] || 0) + 1; //Aggiunge 1 al contatore della motivazione. Se è la prima volta che compare parte da zero. Un libro con tre motivazioni diverse aumenta tre contatori. (I libri senza motivazione finiscono nella voce "" che nessuno scaffale legge.)
+   }
   }
 
   // Altezza della pagina= margini + altezza degli scaffali
