@@ -2,7 +2,7 @@
 let GLIFO_VALE = 50;
 
 //categorie ban
-// A sinistra il valore scritto nella colonna "reason_categories" del CSV - a destra il nome sul sito
+// A sx il valore di "reason_categories" del CSV e a dx il nome che viene sul sito
 let reasoncategories = {
   language_profanity:      "LANGUAGE PROFANITY",
   religious_objection:     "RELIGIOUS THEMES",
@@ -20,8 +20,8 @@ console.log("Reason Categories:", reasoncategories); //mostra in console le cate
 let counts = {}; // Quanti libri ha ogni motivazione
 
 // elementi stile messi in style.css che veongono poi letti da loadStyle
-let margin, labelWidth, bookWidth, bookGap, bookHeight, plankHeight, shelfGap, shelfStep, labelSize;
-let backgroundColor, textColor, bookColor, plankColor, fontFamily;
+let margin, labelWidth, bookWidth, bookGap, bookHeight, shelfHeight, shelfGap, shelfStep, labelSize;
+let backgroundColor, textColor, bookColor, shelfColor, fontFamily;
 
 
 async function setup() {
@@ -44,30 +44,6 @@ async function setup() {
 }
 
 
-// Legge da style.css  
-function loadStyle() {
-  let css = getComputedStyle(document.documentElement);
-  let text = (name) => css.getPropertyValue(name).trim();
-  let number = (name) => parseFloat(text(name));
-
-  backgroundColor = text('--sfondo');
-  textColor = text('--testo');
-  bookColor = text('--libro');
-  plankColor = text('--tavola');
-  fontFamily = text('--font');
-  labelSize = number('--testo-dimensione');
-
-  margin = number('--margine');
-  labelWidth = number('--etichetta-larghezza');
-  bookWidth = number('--libro-larghezza');
-  bookGap = number('--libro-spazio');
-  bookHeight = number('--libro-altezza');
-  plankHeight = number('--tavola-spessore');
-  shelfGap = number('--scaffale-spazio');
-  shelfStep = bookHeight + plankHeight + shelfGap; // Quanto spazio occupa uno scaffale  
-}
-
-
 function draw() {
   background(backgroundColor);
   noStroke();
@@ -78,15 +54,15 @@ function draw() {
   let y = margin; //altezza del prossimo scaffale che parte dal margine in alto
 
   for (let key in reasoncategories) { //Ciclo sulle 10 motivazioni: ognuna diventa uno scaffale. La tavola sta subito sotto l'altezza dei libri
-    let plankY = y + bookHeight; //altezza della tavola = altezza dei libri + margine in alto
+    let shelfY = y + bookHeight; //altezza della tavola = altezza dei libri + margine in alto
 
-    // Tavola
-    fill(plankColor); 
-    rect(shelfX, plankY, width - margin - shelfX, plankHeight); //la larghezza va da dove iniziano gli scaffali fino al margine destro
+    // scaffale
+    fill(shelfColor); 
+    rect(shelfX, shelfY, width - margin - shelfX, shelfHeight); //la larghezza va da dove iniziano gli scaffali fino al margine destro
 
     // Nome della motivazione
     fill(textColor);
-    text(reasoncategories[key], margin, plankY - 8); //per centrare il testo verticalmente
+    text(reasoncategories[key], margin, shelfY - 8); //per centrare il testo verticalmente
 
     // Libri: uno ogni GLIFO_VALE libri, arrotondato per eccesso (almeno uno)
     fill(bookColor);
@@ -96,4 +72,27 @@ function draw() {
 
     y += shelfStep; // Shelfstep è il punto di partenza del prossimo scaffale più in basso --> 78px (bookeheight + plankHeight + shelfGap)
   }
+}
+
+// Legge da style.css  
+function loadStyle() {
+  let css = getComputedStyle(document.documentElement);
+  let text = (name) => css.getPropertyValue(name).trim();
+  let number = (name) => parseFloat(text(name));
+
+  backgroundColor = text('--sfondo');
+  textColor = text('--testo');
+  bookColor = text('--libro');
+  shelfColor = text('--tavola');
+  fontFamily = text('--font');
+  labelSize = number('--testo-dimensione');
+
+  margin = number('--margine');
+  labelWidth = number('--etichetta-larghezza');
+  bookWidth = number('--libro-larghezza');
+  bookGap = number('--libro-spazio');
+  bookHeight = number('--libro-altezza');
+  shelfHeight = number('--tavola-spessore');
+  shelfGap = number('--scaffale-spazio');
+  shelfStep = bookHeight + shelfHeight + shelfGap; // Quanto spazio occupa uno scaffale  
 }
